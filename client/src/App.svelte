@@ -1,6 +1,10 @@
 <script lang="ts">
-  import UserForm from "./components/UserForm.svelte";
-  import UserList from "./components/UserList.svelte";
+  import ImageSelection from "./components/ImageSelection.svelte";
+  // import UserForm from "./components/UserForm.svelte";
+  // import UserList from "./components/UserList.svelte";
+  // import ImageTest from "./components/ImageTest.svelte";
+  import VideogameForm from "./components/VideogameForm.svelte";
+  import VideogameList from "./components/VideogameList.svelte";
 
   let displayForm: boolean = true;
   function changeDisplay() {
@@ -8,11 +12,41 @@
   }
 </script>
 
+<div class="navwrap">
+  <div class="header-text">
+    <h1>gogo game tracker</h1>
+  </div>
+  <div>
+    <button on:click={changeDisplay}>Change Display</button>
+  </div>
+</div>
+
 <main>
-  <button on:click={changeDisplay}>Change Display</button>
   {#if displayForm}
-    <UserForm />
+    <!-- <UserForm /> -->
+    <ImageSelection />
+    <br/>
+    <VideogameForm />
   {:else}
-    <UserList />
+    <!-- <UserList /> -->
+    <VideogameList />
   {/if}
 </main>
+
+<style>
+  .navwrap {
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(180deg, #e61fea 0%, #7cb9e8 100%);
+    padding: 0 10px 0 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    align-items: center;
+  }
+
+  .header-text {
+    text-align: center;
+    color: #1a1a1a;
+    text-transform: uppercase;
+  }
+</style>
