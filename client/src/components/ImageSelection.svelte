@@ -1,5 +1,7 @@
 <script lang="ts">
-  let fileinput, submit, imageToDisplay;
+  import axios from "axios";
+
+  let fileinput, imageToDisplay;
 
   const onFileSelected = (e) => {
     let image = e.target.files[0];
@@ -8,11 +10,20 @@
     reader.onload = (e) => {
       imageToDisplay = e.target.result;
     };
-    submit.click();
+
+    // below code will send the form data (which is only an image) to server side via axios
+    // first iterations used a bastardized click event which is no longer required.
+    const form = document.querySelector("form");
+    const formData = new FormData(form);
+    axios.post("http://localhost:3000/cover", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 
-  // TODO: FIX SPINNER OF DOOM
-  // TODO: FIX LINT
+  // CODE SEEN BELOW IS LITERALLY JUST LINT REMOVER, I'M DUMB
+  // on:keydown={() => {fileinput.click();}}
 </script>
 
 {#if imageToDisplay}
@@ -20,6 +31,9 @@
     src={imageToDisplay}
     alt="uploaded"
     on:click={() => {
+      fileinput.click();
+    }}
+    on:keydown={() => {
       fileinput.click();
     }}
   />
@@ -30,15 +44,14 @@
     on:click={() => {
       fileinput.click();
     }}
+    on:keydown={() => {
+      fileinput.click();
+    }}
   />
 {/if}
 <div class="helper-text">Click image to upload cover art!</div>
 
-<form
-  action="http://localhost:3000/cover"
-  method="post"
-  enctype="multipart/form-data"
->
+<form>
   <input
     style="display:none"
     type="file"
@@ -47,12 +60,11 @@
     on:change={(e) => onFileSelected(e)}
     bind:this={fileinput}
   />
-  <input style="display:none" type="submit" value="Submit" bind:this={submit} />
 </form>
 
 <style>
   img {
-    max-height: 300px;
+    max-height: 250px;
     border-radius: 8px;
   }
 
