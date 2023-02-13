@@ -2,13 +2,18 @@ import express from "express";
 import fs from "fs";
 import type { Videogame } from "./domain/videogame";
 import cors from "cors";
+import fileupload from "express-fileupload";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// at /users, I need to open that file, users.json, and then return that to the client.
+// used for middleware to handle files
+app.use(fileupload());
+app.use(express.urlencoded({ extended: true }));
+
+// at /videogames, I need to open that file, videogames.json, and then return that to the client.
 app.get("/videogames", function (req, res) {
   console.log("CALLED GET VIDEOGAMES ROUTE");
   const videogames = fs.readFileSync("./videogames.json");
@@ -34,7 +39,7 @@ app.post("/videogame", function (req, res) {
     goodGame: goodGame
   };
 
-  // read the file, add our user to the array, save the file.
+  // read the file, add our videogame to the array, save the file.
   const videogames = JSON.parse(fs.readFileSync("./videogames.json") as any as string);
   videogames.push(videogame);
   fs.writeFileSync("./videogames.json", JSON.stringify(videogames));

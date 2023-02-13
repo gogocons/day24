@@ -8,17 +8,6 @@
   let goodGame: boolean = false;
 
   async function submitForm() {
-    // const test = {
-    //   name: name,
-    //   platform: platform,
-    //   releaseYear: releaseYear,
-    //   genre: genre,
-    //   ratingAgency: ratingAgency,
-    //   goodGame: goodGame
-    // };
-
-    // console.log(test);
-    
     const result = await axios.post("http://localhost:3000/videogame", {
       name: name,
       platform: platform,

@@ -1,34 +1,40 @@
 <script lang="ts">
   const blank = "xbox-one-blank-case.png";
+  let imageToDisplay;
   let imageToSave;
 
   const onFileSelected = (e) => {
-    let image = e.target.files[0];
-    console.log("this is the image", image);
+    imageToSave = e.target.files[0];
+    console.log("this is the image", imageToSave);
     let reader = new FileReader();
     console.log("this is the reader", reader);
-    reader.readAsDataURL(image);
+    reader.readAsDataURL(imageToSave);
     reader.onload = (e) => {
-      imageToSave = e.target.result;
+      imageToDisplay = e.target.result;
     };
   };
 </script>
 
-{#if imageToSave}
-  <img src={imageToSave} alt="uploaded" />
+{#if imageToDisplay}
+  <img src={imageToDisplay} alt="selected" />
 {:else}
-  <img src={blank} alt="not uploaded" />
+  <img src={blank} alt="default" />
 {/if}
 <br />
-<input
-  type="file"
-  accept=".jpg, .jpeg, .png"
-  on:change={(e) => onFileSelected(e)}
-/>
 
-<button on:click={console.log(imageToSave)}>
-  log uploaded image
-</button>
+<form
+  action="http://localhost:3000/cover"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input
+    type="file"
+    name="cover-art"
+    accept=".jpg, .jpeg, .png"
+    on:change={(e) => onFileSelected(e)}
+  />
+  <input type="submit" value="Submit" />
+</form>
 
 <style>
   img {
