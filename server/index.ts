@@ -22,6 +22,7 @@ let storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+// this is the default image to use if user does not select an image
 let coverArt: string = "http://localhost:3000/xbox-one-blank-case.png";
 
 const app = express();
@@ -29,11 +30,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// app.use(express.static('public'));
+// set to allow uploaded images to be reachable from front-end
 app.use(express.static("uploads"));
 
 app.post("/cover", upload.single("cover-art"), function (req, res, next) {
-    // req.file is the `cover-art` file
+  // req.file is the `cover-art` file
   console.log(req.file);
   coverArt = "http://localhost:3000/" + req.file?.filename;
   console.log(coverArt);
