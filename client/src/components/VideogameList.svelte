@@ -15,6 +15,15 @@
 
 {#each videogames as videogame}
   <div class="card">
+    <img src={videogame.image} alt={videogame.name} />
     {videogame.name}
   </div>
 {/each}
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+  padding: 2em;
+}
+</style>
