@@ -1,26 +1,35 @@
 <script lang="ts">
-  const blank = "xbox-one-blank-case.png";
-  let imageToDisplay;
-  let imageToSave;
+  let fileinput, submit, imageToDisplay;
 
   const onFileSelected = (e) => {
-    imageToSave = e.target.files[0];
-    console.log("this is the image", imageToSave);
+    let image = e.target.files[0];
     let reader = new FileReader();
-    console.log("this is the reader", reader);
-    reader.readAsDataURL(imageToSave);
+    reader.readAsDataURL(image);
     reader.onload = (e) => {
       imageToDisplay = e.target.result;
     };
+    submit.click();
   };
 </script>
 
 {#if imageToDisplay}
-  <img src={imageToDisplay} alt="selected" />
+  <img
+    src={imageToDisplay}
+    alt="uploaded"
+    on:click={() => {
+      fileinput.click();
+    }}
+  />
 {:else}
-  <img src={blank} alt="default" />
+  <img
+    src="./xbox-one-blank-case.png"
+    alt="default"
+    on:click={() => {
+      fileinput.click();
+    }}
+  />
 {/if}
-<br />
+<div class="helper-text">Click image to upload cover art!</div>
 
 <form
   action="http://localhost:3000/cover"
@@ -28,17 +37,23 @@
   enctype="multipart/form-data"
 >
   <input
+    style="display:none"
     type="file"
     name="cover-art"
     accept=".jpg, .jpeg, .png"
     on:change={(e) => onFileSelected(e)}
+    bind:this={fileinput}
   />
-  <input type="submit" value="Submit" />
+  <input style="display:none" type="submit" value="Submit" bind:this={submit} />
 </form>
 
 <style>
   img {
     max-height: 300px;
     border-radius: 8px;
+  }
+
+  .helper-text {
+    margin: 5px;
   }
 </style>

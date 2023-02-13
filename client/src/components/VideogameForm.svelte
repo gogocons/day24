@@ -28,7 +28,7 @@
   <input bind:value={genre} type="text" placeholder="Genre" />
   <input bind:value={ratingAgency} type="text" placeholder="ESRB Rating" />
   <div>
-    <label for="quality">Is it good?</label>
+    <label for="quality">Did you enjoy it?</label>
     <input bind:checked={goodGame} type="checkbox" id="quality" />
   </div>
 </div>

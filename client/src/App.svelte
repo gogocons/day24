@@ -1,8 +1,5 @@
 <script lang="ts">
   import ImageSelection from "./components/ImageSelection.svelte";
-  // import UserForm from "./components/UserForm.svelte";
-  // import UserList from "./components/UserList.svelte";
-  // import ImageTest from "./components/ImageTest.svelte";
   import VideogameForm from "./components/VideogameForm.svelte";
   import VideogameList from "./components/VideogameList.svelte";
 
@@ -23,12 +20,10 @@
 
 <main>
   {#if displayForm}
-    <!-- <UserForm /> -->
+    <h1>Upload Game</h1>
     <ImageSelection />
-    <br/>
     <VideogameForm />
   {:else}
-    <!-- <UserList /> -->
     <VideogameList />
   {/if}
 </main>

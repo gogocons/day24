@@ -12,18 +12,29 @@
     videogames = await getVideogames();
   });
 </script>
-
+<div class="games-container">
 {#each videogames as videogame}
   <div class="card">
     <img src={videogame.image} alt={videogame.name} />
     {videogame.name}
   </div>
 {/each}
+</div>
 
 <style>
+
+  .games-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
   .card {
     display: flex;
     flex-direction: column;
-  padding: 2em;
-}
+    padding: 2em;
+  }
+
+  img {
+    max-height: 200px;
+    border-radius: 8px;
+  }
 </style>

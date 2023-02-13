@@ -1,4 +1,5 @@
 type Videogame = {
+  image: string;
   name: string;
   platform: string;
   releaseYear: number;
