@@ -10,6 +10,9 @@
     };
     submit.click();
   };
+
+  // TODO: FIX SPINNER OF DOOM
+  // TODO: FIX LINT
 </script>
 
 {#if imageToDisplay}
