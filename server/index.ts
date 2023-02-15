@@ -1,9 +1,9 @@
 import express from "express";
 import fs from "fs";
-import type { Videogame } from "./domain/videogame";
 import cors from "cors";
 import validateUserInput from "./utils/validateUserInput";
 import upload from "./utils/imageUpload";
+import { createAndSaveGame } from "./domain/videogame";
 
 // this is the default image to use if user does not select an image
 let coverArt: string = "http://localhost:3000/xbox-one-blank-case.png";
@@ -18,9 +18,8 @@ app.use(express.static("uploads"));
 
 app.post("/cover", upload.single("cover-art"), function (req, res, next) {
   // req.file is the `cover-art` file
-  console.log(req.file);
   coverArt = "http://localhost:3000/" + req.file?.filename;
-  console.log(coverArt);
+  res.send(coverArt);
 });
 
 // at /videogames, I need to open that file, videogames.json, and then return that to the client.
@@ -46,27 +45,20 @@ app.post("/videogame", function (req, res) {
     return;
   }
 
-  const videogame: Videogame = {
-    image: image,
-    name: name,
-    platform: platform,
-    releaseYear: releaseYear,
-    genre: genre,
-    ratingAgency: ratingAgency,
-    goodGame: goodGame,
-  };
+  const videogame = createAndSaveGame(
+    image,
+    name,
+    platform,
+    releaseYear,
+    genre,
+    ratingAgency,
+    goodGame
+  );
+
+  res.send(videogame);
 
   // reset the default coverArt variable for next upload
   coverArt = "http://localhost:3000/xbox-one-blank-case.png";
-
-  // read the file, add our videogame to the array, save the file.
-  const videogames = JSON.parse(
-    fs.readFileSync("./videogames.json") as any as string
-  );
-  videogames.push(videogame);
-  fs.writeFileSync("./videogames.json", JSON.stringify(videogames));
-
-  res.send(videogame);
 });
 
 app.listen(3000);

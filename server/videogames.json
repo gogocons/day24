@@ -34,5 +34,14 @@
     "genre": "Stealth",
     "ratingAgency": "M",
     "goodGame": true
+  },
+  {
+    "image": "http://localhost:3000/Forza-Horizon-5-cover-art.jpg",
+    "name": "Forza Horizon 5",
+    "platform": "Xbox Series X",
+    "releaseYear": 2021,
+    "genre": "Racing",
+    "ratingAgency": "E",
+    "goodGame": true
   }
 ]
