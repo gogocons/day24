@@ -1,1 +1,38 @@
-[{"image":"http://localhost:3000/Cyberpunk-2077-box-art.jpg","name":"Cyberpunk 2077","platform":"Xbox Series X","releaseYear":2020,"genre":"Action RPG","ratingAgency":"M","goodGame":true},{"image":"http://localhost:3000/xbox-one-blank-case.png","name":"test","platform":"test","releaseYear":2022,"genre":"whatever","ratingAgency":"E","goodGame":false},{"image":"http://localhost:3000/Vampire-Survivors-key-art.jpg","name":"Vampire Survivors","platform":"Xbox","releaseYear":2022,"genre":"Shmup","ratingAgency":"Unknown","goodGame":true}]
+[
+  {
+    "image": "http://localhost:3000/Cyberpunk-2077-box-art.jpg",
+    "name": "Cyberpunk 2077",
+    "platform": "Xbox Series X",
+    "releaseYear": 2020,
+    "genre": "Action RPG",
+    "ratingAgency": "M",
+    "goodGame": true
+  },
+  {
+    "image": "http://localhost:3000/Vampire-Survivors-key-art.jpg",
+    "name": "Vampire Survivors",
+    "platform": "Xbox",
+    "releaseYear": 2022,
+    "genre": "Shmup",
+    "ratingAgency": "Unknown",
+    "goodGame": true
+  },
+  {
+    "image": "http://localhost:3000/Baldur-s-Gate-III-Logo.png",
+    "name": "Baldur's Gate III",
+    "platform": "PC",
+    "releaseYear": 2023,
+    "genre": "CRPG",
+    "ratingAgency": "M",
+    "goodGame": false
+  },
+  {
+    "image": "http://localhost:3000/Hitman-2015.jpg",
+    "name": "Hitman",
+    "platform": "Xbox",
+    "releaseYear": 2016,
+    "genre": "Stealth",
+    "ratingAgency": "M",
+    "goodGame": true
+  }
+]

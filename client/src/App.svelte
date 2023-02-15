@@ -24,6 +24,7 @@
     <ImageSelection />
     <VideogameForm />
   {:else}
+    <h1>Games List</h1>
     <VideogameList />
   {/if}
 </main>

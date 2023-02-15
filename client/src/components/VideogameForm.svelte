@@ -1,23 +1,46 @@
 <script lang="ts">
   import axios from "axios";
-  let name: string = "";
+  import { fade } from "svelte/transition";
+
+  let name: string;
   let platform: string;
   let releaseYear: number;
-  let genre: string = "";
-  let ratingAgency: string = "";
+  let genre: string;
+  let ratingAgency: string;
   let goodGame: boolean = false;
 
-  async function submitForm() {
-    const result = await axios.post("http://localhost:3000/videogame", {
-      name: name,
-      platform: platform,
-      releaseYear: releaseYear,
-      genre: genre,
-      ratingAgency: ratingAgency,
-      goodGame: goodGame
-    });
+  let color: string;
+  let message: string;
 
-    console.log(result);
+  let timer = null;
+  function clearMessage() {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+      message = undefined;
+    }, 1600);
+  }
+
+  async function submitForm() {
+    try {
+      await axios.post("http://localhost:3000/videogame", {
+        name: name,
+        platform: platform,
+        releaseYear: releaseYear,
+        genre: genre,
+        ratingAgency: ratingAgency,
+        goodGame: goodGame,
+      });
+      color = "green";
+      message = "successfully added game!";
+      clearMessage();
+    } catch (e) {
+      color = "red";
+      message = e.response.data.error;
+      clearMessage();
+    }
   }
 </script>
 
@@ -34,8 +57,22 @@
 </div>
 <button on:click={async () => await submitForm()}>Submit</button>
 
+{#if message}
+  <h3 style="color:{color}" out:fade>
+    {message}
+  </h3>
+{/if}
+
 <style>
   .inputs-container {
     display: grid;
+  }
+
+  button {
+    margin: 5px;
+  }
+
+  h3 {
+    text-transform: uppercase;
   }
 </style>

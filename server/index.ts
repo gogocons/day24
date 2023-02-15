@@ -2,25 +2,8 @@ import express from "express";
 import fs from "fs";
 import type { Videogame } from "./domain/videogame";
 import cors from "cors";
-import multer from "multer";
-
-// below sets up the file name and storage location for the image that is uploaded by the user
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    // clean the filename and keep original extension of file
-    const lastDot = file.originalname.lastIndexOf(".");
-    const cleanName = file.originalname
-      .substring(0, lastDot)
-      .replace(/([^a-z0-9]+)/gi, "-");
-    const ext = file.originalname.substring(lastDot, file.originalname.length);
-
-    cb(null, cleanName + ext);
-  },
-});
-const upload = multer({ storage: storage });
+import validateUserInput from "./utils/validateUserInput";
+import upload from "./utils/imageUpload";
 
 // this is the default image to use if user does not select an image
 let coverArt: string = "http://localhost:3000/xbox-one-blank-case.png";
@@ -42,14 +25,11 @@ app.post("/cover", upload.single("cover-art"), function (req, res, next) {
 
 // at /videogames, I need to open that file, videogames.json, and then return that to the client.
 app.get("/videogames", function (req, res) {
-  console.log("CALLED GET VIDEOGAMES ROUTE");
   const videogames = fs.readFileSync("./videogames.json");
   res.send(videogames);
 });
 
 app.post("/videogame", function (req, res) {
-  console.log("CALLED POST VIDEOGAME ROUTE");
-
   // req.body has the incoming JSON data.
   const image = coverArt;
   const name = req.body.name;
@@ -58,6 +38,13 @@ app.post("/videogame", function (req, res) {
   const genre = req.body.genre;
   const ratingAgency = req.body.ratingAgency;
   const goodGame = req.body.goodGame;
+
+  try {
+    validateUserInput(name, platform, releaseYear, genre, ratingAgency);
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+    return;
+  }
 
   const videogame: Videogame = {
     image: image,
