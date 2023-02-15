@@ -12,6 +12,8 @@
   let color: string;
   let message: string;
 
+  // this a timer script to reset the message clearing if a user spams the button
+  // it only appears on error, successful uploads are handled in a different way
   let timer = null;
   function clearMessage() {
     if (timer) {
@@ -23,23 +25,34 @@
     }, 1600);
   }
 
+  // this variable will be used to not let a user spam the submit button
+  // it is only utilized for successful submissions, to prevent repeats.
+  let submitSuccess: boolean = false;
+
   async function submitForm() {
-    try {
-      await axios.post("http://localhost:3000/videogame", {
-        name: name,
-        platform: platform,
-        releaseYear: releaseYear,
-        genre: genre,
-        ratingAgency: ratingAgency,
-        goodGame: goodGame,
-      });
-      color = "green";
-      message = "successfully added game!";
-      clearMessage();
-    } catch (e) {
-      color = "red";
-      message = e.response.data.error;
-      clearMessage();
+    if (!submitSuccess) {
+      try {
+        await axios.post("http://localhost:3000/videogame", {
+          name: name,
+          platform: platform,
+          releaseYear: releaseYear,
+          genre: genre,
+          ratingAgency: ratingAgency,
+          goodGame: goodGame,
+        });
+        submitSuccess = true;
+        color = "green";
+        message = "successfully added game!";
+        // this will reload the page after successful submission to reset the form
+        // lazy mans approach currently... TODO: find a better way!
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      } catch (e) {
+        color = "red";
+        message = e.response.data.error;
+        clearMessage();
+      }
     }
   }
 </script>
@@ -55,7 +68,7 @@
     <input bind:checked={goodGame} type="checkbox" id="quality" />
   </div>
 </div>
-<button on:click={async () => await submitForm()}>Submit</button>
+<button on:click={submitForm}>Submit</button>
 
 {#if message}
   <h3 style="color:{color}" out:fade>

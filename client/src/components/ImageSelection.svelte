@@ -1,7 +1,24 @@
 <script lang="ts">
   import axios from "axios";
+  import { fade } from "svelte/transition";
 
   let fileinput, imageToDisplay;
+
+  let color: string;
+  let message: string;
+
+  // this a timer script to reset the message clearing if a user spams the button
+  // it only appears on error, successful uploads are handled in a different way
+  let timer = null;
+  function clearMessage() {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+      message = undefined;
+    }, 5000);
+  }
 
   const onFileSelected = (e) => {
     let image = e.target.files[0];
@@ -11,15 +28,27 @@
       imageToDisplay = e.target.result;
     };
 
+    uploadImageToBackend();
+
     // below code will send the form data (which is only an image) to server side via axios
     // first iterations used a bastardized click event which is no longer required.
-    const form = document.querySelector("form");
-    const formData = new FormData(form);
-    axios.post("http://localhost:3000/cover", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    async function uploadImageToBackend() {
+      const form = document.querySelector("form");
+      const formData = new FormData(form);
+      try {
+        await axios.post("http://localhost:3000/cover", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        color = "green";
+        message = "successfully added cover art!";
+      } catch (e) {
+        color = "red";
+        message = e.message;
+        clearMessage();
+      }
+    }
   };
 
   // CODE SEEN BELOW IS LITERALLY JUST LINT REMOVER, I'M DUMB
@@ -49,7 +78,12 @@
     }}
   />
 {/if}
-<div class="helper-text">Click image to upload cover art!</div>
+
+{#if message}
+  <div class="message-text" style="color:{color}">{message}</div>
+{:else}
+  <div class="helper-text">Click image to upload cover art!</div>
+{/if}
 
 <form>
   <input
@@ -66,6 +100,11 @@
   img {
     max-height: 250px;
     border-radius: 8px;
+  }
+
+  .message-text {
+    margin: 5px;
+    text-transform: uppercase;
   }
 
   .helper-text {
